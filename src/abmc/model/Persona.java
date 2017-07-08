@@ -9,6 +9,7 @@ import javafx.beans.property.StringProperty;
  */
 public class Persona {
     
+    private Integer id;
     private StringProperty nombre;
     private StringProperty apellido;
     private StringProperty direccion;
@@ -16,7 +17,8 @@ public class Persona {
     private StringProperty celular;
     private StringProperty email;
 
-    public Persona(String nombre, String apellido, String direccion, String telefono, String celular, String email) {
+    public Persona(Integer id, String nombre, String apellido, String direccion, String telefono, String celular, String email) {
+        this.id = id;
         this.nombre = new SimpleStringProperty(nombre);
         this.apellido = new SimpleStringProperty(apellido);
         this.direccion = new SimpleStringProperty(direccion);
@@ -25,6 +27,15 @@ public class Persona {
         this.email = new SimpleStringProperty(email);
     }
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    
     public String getNombre() {
         return nombre.get();
     }

@@ -40,7 +40,7 @@ public class PersonaDao {
             // Muestra los datos
             while (rs.next()) {
                 // Arma el objeto auto con los datos de la consulta
-                Persona  p = new Persona(rs.getString("nombre"), rs.getString("apellido"), rs.getString("direccion"),
+                Persona  p = new Persona(rs.getInt("id"), rs.getString("nombre"), rs.getString("apellido"), rs.getString("direccion"),
                         rs.getString("telefono"), rs.getString("celular"), rs.getString("email"));
                 
                 // Agrega el auto a la coleccion

@@ -5,9 +5,11 @@
  */
 package abmc.controller;
 
+import abmc.dao.PersonaDao;
 import abmc.model.Persona;
 import java.net.URL;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Optional;
@@ -60,12 +62,9 @@ public class FillDataExampleController implements Initializable {
     @FXML
     private TableColumn<Persona, String> col_apellido;
 
+    private PersonaDao personaDao;
+    
     final ObservableList<Persona> data = FXCollections.observableArrayList(
-            new Persona("Jacob", "Smith", "", "", "", "jacob.smith@example.com"),
-            new Persona("Isabella", "Johnson", "", "", "", "isabella.johnson@example.com"),
-            new Persona("Ethan", "Williams", "", "", "", "ethan.williams@example.com"),
-            new Persona("Emma", "Jones", "", "", "", "emma.jones@example.com"),
-            new Persona("Michael", "Brown", "", "", "", "michael.brown@example.com")
     );
 
     /**
@@ -73,20 +72,28 @@ public class FillDataExampleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // Initialize the person table with the two columns.
-        col_nombre.setCellValueFactory(cellData -> cellData.getValue().nombre());
-        col_apellido.setCellValueFactory(cellData -> cellData.getValue().apellido());
-
-        // Listener para detectar el cambio de seleccion
-        tbl_personas.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> cargarPersonaSeleccionada(newValue));
-
-        tbl_personas.setItems(data);
+        
+        try {
+            personaDao = new PersonaDao();
+            
+            // Initialize the person table with the two columns.
+            col_nombre.setCellValueFactory(cellData -> cellData.getValue().nombre());
+            col_apellido.setCellValueFactory(cellData -> cellData.getValue().apellido());
+            
+            // Listener para detectar el cambio de seleccion
+            tbl_personas.getSelectionModel().selectedItemProperty().addListener(
+                    (observable, oldValue, newValue) -> cargarPersonaSeleccionada(newValue));
+            
+            tbl_personas.setItems(data);
+            llenarTablaDePersonas();
+        } catch (SQLException ex) {
+            Logger.getLogger(FillDataExampleController.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
-    private void llenarTablaDePersonas() {
-
+    private void llenarTablaDePersonas() throws SQLException {
+        personaDao.getAll().forEach(p -> tbl_personas.getItems().add(p));
     }
 
     @FXML
@@ -96,7 +103,7 @@ public class FillDataExampleController implements Initializable {
     
     @FXML
     private void grabarPersona(ActionEvent event) {
-        Persona  p = new Persona(lbl_name_value.getText(), lbl_lastname_value.getText(), lbl_address_value.getText(),
+        Persona  p = new Persona(null, lbl_name_value.getText(), lbl_lastname_value.getText(), lbl_address_value.getText(),
         lbl_phone_value.getText(), lbl_cell_value.getText(), lbl_email_value.getText());
         tbl_personas.getItems().add(p);
     }

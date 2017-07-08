@@ -103,9 +103,16 @@ public class FillDataExampleController implements Initializable {
     
     @FXML
     private void grabarPersona(ActionEvent event) {
-        Persona  p = new Persona(null, lbl_name_value.getText(), lbl_lastname_value.getText(), lbl_address_value.getText(),
+        Persona  p = new Persona( 0, lbl_name_value.getText(), lbl_lastname_value.getText(), lbl_address_value.getText(),
         lbl_phone_value.getText(), lbl_cell_value.getText(), lbl_email_value.getText());
-        tbl_personas.getItems().add(p);
+        try {
+            personaDao.add(p);
+            tbl_personas.getItems().add(p);
+        } catch (SQLException ex) {
+
+        }
+        
+        
     }
 
     @FXML
@@ -123,17 +130,20 @@ public class FillDataExampleController implements Initializable {
      */
     @FXML
     private void eliminarPersona() {
+        Persona p1 = tbl_personas.getSelectionModel().getSelectedItem();
+        int id = p1.getId();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Confirmacion");
-        alert.setHeaderText("Esta a punto de eliminar el Auto...");
+        alert.setHeaderText("Esta a punto de eliminar la Persona: " + id);
         alert.setContentText("desea continuar?");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK) {
             Persona p = tbl_personas.getSelectionModel().getSelectedItem();
-
+                
             try {
 
                 int selectedIndex = tbl_personas.getSelectionModel().getSelectedIndex();
+                personaDao.delete(p.getId());
                 tbl_personas.getItems().remove(selectedIndex);
             } catch (Exception ex) {
                 // Muestra el mensaje de error

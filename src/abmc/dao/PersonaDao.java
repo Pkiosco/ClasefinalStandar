@@ -8,6 +8,7 @@ package abmc.dao;
 import abmc.model.Persona;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -55,14 +56,32 @@ public class PersonaDao {
     }
     
     public void add(Persona persona)throws SQLException  {
-        
+    PreparedStatement ps =  connection.prepareStatement("insert into Personas (nombre, Apellido,direccion,telefono, Celular, email) VALUES (?,?,?,?,?,?)");
+    ps.setString(1, persona.getNombre());
+    ps.setString(2, persona.getApellido());
+    ps.setString(3, persona.getDireccion());
+    ps.setString(4, persona.getTelefono());
+    ps.setString(5, persona.getCelular());
+    ps.setString(6, persona.getEmail());
+    
+    ps.execute();         
     }
 
     public void update(Persona persona)throws SQLException  {
-        
+    PreparedStatement psu =  connection.prepareStatement("update clientes set "
+    + "id = ?, nombre = ?, apellido = ? ,direccion = ? , telefono  = ? , celular  = ? , email =? ");
+    psu.setInt(1, persona.getId());
+    psu.setString(2, persona.getNombre());
+    psu.setString(3, persona.getApellido());
+    psu.setString(4, persona.getDireccion());
+    psu.setString(5, persona.getCelular());
+    psu.setString(6, persona.getEmail());
+    
+    psu.execute(); 
     }
 
-    public void delete(Persona persona)throws SQLException  {
-        
+    public void delete(int id)throws SQLException  {
+    PreparedStatement psD =  connection.prepareStatement("Delete from clientes where id = ?");   
+    psD.setInt(1, id);
     }    
 }

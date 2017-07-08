@@ -26,26 +26,29 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
 public class FillDataExampleController implements Initializable {
 
     @FXML
-    private Label lbl_name_value;
+    private TextField lbl_name_value;
     @FXML
-    private Label lbl_lastname_value;
+    private TextField lbl_lastname_value;
     @FXML
-    private Label lbl_address_value;
+    private TextField lbl_address_value;
     @FXML
-    private Label lbl_phone_value;
+    private TextField lbl_phone_value;
     @FXML
-    private Label lbl_cell_value;
+    private TextField lbl_cell_value;
     @FXML
-    private Label lbl_email_value;
+    private TextField lbl_email_value;
     @FXML
     private Button btn_nuevo;
     @FXML
     private Button btn_editar;
+    @FXML
+    private Button btn_grabar;
     @FXML
     private Button btn_borrar;
     @FXML
@@ -90,11 +93,16 @@ public class FillDataExampleController implements Initializable {
     private void personaNuevo(ActionEvent event) {
         cargarPersonaSeleccionada(null);
     }
+    
+    @FXML
+    private void grabarPersona(ActionEvent event) {
+        Persona  p = new Persona(lbl_name_value.getText(), lbl_lastname_value.getText(), lbl_address_value.getText(),
+        lbl_phone_value.getText(), lbl_cell_value.getText(), lbl_email_value.getText());
+        tbl_personas.getItems().add(p);
+    }
 
     @FXML
     private void editarPersona(ActionEvent event) {
-
-
     }
 
     @FXML
